@@ -1,1 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Yoga with Poonam | Transform Your Life</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #F7F4F0;
+      --bg-deep: #EDE8E1;
+      --fg: #1A1A1A;
+      --fg-muted: #5C5C5C;
+      --accent: #C4725A;
+      --accent-light: #E8A080;
+      --primary: #2C3E34;
+      --primary-light: #4A6B52;
+      --gold: #B8965A;
+      --card: #FFFFFF;
+      --border: rgba(44, 62, 52, 0.1);
+    }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    @media (pointer: coarse) {
+      body { cursor: auto; }
+      .custom-cursor { display: none !important; }
+    }
+
+    .font-display {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      mix-blend-mode: difference;
+    }
+
+    .custom-cursor.hover {
+      transform: scale(2);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Noise Texture */
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9000;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Preloader */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--primary);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+      clip-path: circle(150% at 50% 50%);
+    }
+
+    .preloader.loaded {
+      clip-path: circle(0% at 50% 50%);
+    }
+
+    .loader-text {
+      color: white;
+      font-size: clamp(2rem, 8vw, 5rem);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    /* Typography Animations */
+    .split-parent {
+      overflow: hidden;
+    }
+
+    .split-child {
+      display: inline-block;
+      transform: translateY(120%);
+    }
+
+    .split-child.revealed {
+      transform: translateY(0);
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Hero Background */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* Magnetic Button */
+    .magnetic-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 50px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: none;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .magnetic-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      transform: translateY(100%);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .magnetic-btn:hover::before {
+      transform: translateY(0);
+    }
+
+    .magnetic-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .magnetic-btn:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .outline-btn {
+      padding: 20px 50px;
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: all 0.4s ease;
+    }
+
+    .outline-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Section Reveal */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Image Parallax */
+    .parallax-wrapper {
+      overflow: hidden;
+      border-radius: 24px;
+    }
+
+    .parallax-img {
+      width: 100%;
+      height: 120%;
+      object-fit: cover;
+      transition: transform 0.1s ease-out;
+    }
+
+    /* Service Cards */
+    .service-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 48px 40px;
+      border: 1px solid var(--border);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 40px 80px rgba(44, 62, 52, 0.1);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* Before/After Slider */
+    .ba-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 3/4;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 50px 100px rgba(0, 0, 0, 0.15);
+    }
+
+    .ba-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ba-before {
+      z-index: 2;
+      clip-path: inset(0 50% 0 0);
+    }
+
+    .ba-after {
+      z-index: 1;
+    }
+
+    .ba-slider-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: white;
+      z-index: 3;
+      transform: translateX(-50%);
+      cursor: ew-resize;
+    }
+
+    .ba-slider-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      z-index: 4;
+      cursor: ew-resize;
+    }
+
+    /* Stats */
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--primary);
+    }
+
+    /* Form */
+    .form-group {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 20px 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-family: inherit;
+      font-size: 16px;
+      transition: all 0.4s ease;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 10px 40px rgba(44, 62, 52, 0.08);
+    }
+
+    .form-label {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--fg-muted);
+      pointer-events: none;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+
+    .form-input:focus + .form-label,
+    .form-input:not(:placeholder-shown) + .form-label {
+      top: 0;
+      left: 16px;
+      transform: translateY(-50%);
+      font-size: 12px;
+      background: white;
+      padding: 0 8px;
+      color: var(--primary);
+    }
+
+    textarea.form-input + .form-label {
+      top: 20px;
+      transform: none;
+    }
+
+    textarea.form-input:focus + .form-label,
+    textarea.form-input:not(:placeholder-shown) + .form-label {
+      top: 0;
+      transform: translateY(-50%);
+    }
+
+    /* WhatsApp Button */
+    .whatsapp-btn {
+      width: 100%;
+      padding: 22px 40px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .whatsapp-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #128C7E 0%, #25D366 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .whatsapp-btn:hover::before {
+      opacity: 1;
+    }
+
+    .whatsapp-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(37, 211, 102, 0.3);
+    }
+
+    .whatsapp-btn span,
+    .whatsapp-btn svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Testimonial Slider */
+    .testimonial-track {
+      display: flex;
+      gap: 32px;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .testimonial-card {
+      min-width: 400px;
+      background: var(--card);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 640px) {
+      .testimonial-card {
+        min-width: 300px;
+      }
+    }
+
+    /* Navigation */
+    .nav-link {
+      position: relative;
+      color: var(--fg);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Marquee */
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-content {
+      display: inline-block;
+      animation: marquee 30s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 26, 0.6);
+      backdrop-filter: blur(10px);
+      z-index: 8000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: var(--card);
+      padding: 48px;
+      border-radius: 32px;
+      z-index: 8001;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-content.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Floating Shapes */
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(120deg); }
+      66% { transform: translate(-20px, 20px) rotate(240deg); }
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="loader-text">Face Yoga With <span style="color:#FF6B4A;">Poonam</span></div>
+  </div>
+
+  <!-- Noise Texture -->
+  <div class="noise"></div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal-content" id="modalContent">
+    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" class="mx-auto mb-6">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <h3 class="font-display text-3xl font-semibold mb-4">Message Ready!</h3>
+    <p class="text-[var(--fg-muted)] mb-8">Click the button below to send your message directly to Poonam on WhatsApp.</p>
+    <button id="whatsappConfirmBtn" class="whatsapp-btn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      <span>Open WhatsApp</span>
+    </button>
+    <button id="closeModal" class="mt-4 text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">Cancel</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 py-6 px-8 transition-all duration-500" id="navbar">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#" class="font-display text-2xl font-semibold text-[var(--primary)]">Face Yoga With Poonam</a>
+      
+      <div class="hidden lg:flex items-center gap-12">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#transformations" class="nav-link">Results</a>
+        <a href="#testimonials" class="nav-link">Reviews</a>
+        <a href="#contact" class="magnetic-btn"><span>Book Session</span></a>
+      </div>
+      
+      <button class="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-2" id="menuBtn" aria-label="Menu">
+        <span class="w-6 h-0.5 bg-[var(--fg)] transition-all" id="menuLine1"></span>
+        <span class="w-6 h-0.5 bg-[var(--fg)] transition-all" id="menuLine2"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="fixed inset-0 bg-[var(--bg)] z-40 flex flex-col items-center justify-center gap-8 opacity-0 invisible transition-all duration-500" id="mobileMenu">
+    <a href="#about" class="font-display text-4xl font-semibold mobile-link">About</a>
+    <a href="#services" class="font-display text-4xl font-semibold mobile-link">Services</a>
+    <a href="#transformations" class="font-display text-4xl font-semibold mobile-link">Results</a>
+    <a href="#testimonials" class="font-display text-4xl font-semibold mobile-link">Reviews</a>
+    <a href="#contact" class="font-display text-4xl font-semibold mobile-link">Contact</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center overflow-hidden">
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+    
+    <!-- Floating Shapes -->
+    <div class="floating-shape w-96 h-96 bg-[var(--accent)] opacity-20 top-20 -left-48" style="animation-delay: 0s;"></div>
+    <div class="floating-shape w-80 h-80 bg-[var(--primary-light)] opacity-20 bottom-20 -right-40" style="animation-delay: -10s;"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-8 py-32 grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <div class="overflow-hidden mb-6">
+          <p class="text-[var(--accent)] font-semibold tracking-[0.3em] uppercase text-sm split-child" id="heroLabel">
+            Yoga & Wellness Expert
+          </p>
+        </div>
+        
+        <h1 class="font-display text-6xl md:text-7xl lg:text-8xl font-semibold leading-[0.9] mb-8">
+          <div class="overflow-hidden">
+            <span class="split-child" id="title1">Transform</span>
+          </div>
+          <div class="overflow-hidden">
+            <span class="split-child" id="title2">Your Body,</span>
+          </div>
+          <div class="overflow-hidden">
+            <span class="split-child text-[var(--primary)]" id="title3">Elevate</span>
+          </div>
+          <div class="overflow-hidden">
+            <span class="split-child text-[var(--primary)]" id="title4">Your Life</span>
+          </div>
+        </h1>
+        
+        <p class="text-xl text-[var(--fg-muted)] mb-12 max-w-lg leading-relaxed opacity-0" id="heroDesc">
+          Hi, I'm Poonam. I help people achieve lasting transformation through yoga, face yoga, and holistic wellness practices. Over 100 lives changed. Yours could be next.
+        </p>
+        
+        <div class="flex flex-wrap gap-6 opacity-0" id="heroCTA">
+          <a href="#contact" class="magnetic-btn"><span>Start Transformation</span></a>
+          <a href="#services" class="outline-btn">View Services</a>
+        </div>
+      </div>
+      
+      <div class="relative flex justify-center opacity-0" id="heroImage">
+        <div class="ba-container" id="baSlider">
+          <img src="https://z-cdn-media.chatglm.cn/files/c04e6d20-f0f7-4f11-9247-e3f917a9eee5.png?auth_key=1872200096-daa240653300411ca6d9bece9a83d7f5-0-8b778abdbf9061eb77eb5d2b6912fdda" alt="After transformation" class="ba-image ba-after">
+          <img src="https://z-cdn-media.chatglm.cn/files/eec9404d-42b9-444b-8b9b-a4f4921bc2a6.png?auth_key=1872200096-6ae1c7f7ff6b4d328c2f23063c421131-0-5ac8b589b008b76c6117de46701736ef" alt="Before transformation" class="ba-image ba-before">
+          <div class="ba-slider-line" id="baLine"></div>
+          <div class="ba-slider-circle" id="baCircle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+              <path d="M18 8L22 12L18 16"/>
+              <path d="M6 8L2 12L6 16"/>
+            </svg>
+          </div>
+          <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-5 py-2.5 rounded-full text-sm font-semibold z-10">Before</div>
+          <div class="absolute top-6 right-6 bg-[var(--primary)] text-white px-5 py-2.5 rounded-full text-sm font-semibold z-10">After</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-60">
+      <span class="text-xs tracking-[0.3em] uppercase">Scroll</span>
+      <div class="w-px h-16 bg-[var(--primary)] relative overflow-hidden">
+        <div class="absolute inset-0 bg-[var(--accent)] animate-pulse"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="py-8 bg-[var(--primary)] overflow-hidden">
+    <div class="marquee">
+      <div class="marquee-content">
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Yoga</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Face Yoga</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Fitness</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Wellness</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Diet Plans</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Yoga</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Face Yoga</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Fitness</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Wellness</span>
+        <span class="text-[var(--gold)]">◆</span>
+        <span class="text-white/80 text-lg tracking-[0.2em] uppercase font-light mx-8">Diet Plans</span>
+        <span class="text-[var(--gold)]">◆</span>
+       
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <section class="py-32 bg-[var(--bg-deep)]">
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16">
+        <div class="stat-item reveal-section">
+          <div class="stat-number" data-target="1000">0</div>
+          <p class="text-[var(--fg-muted)] mt-4 text-lg">Happy Clients</p>
+        </div>
+        <div class="stat-item reveal-section" style="transition-delay: 0.1s;">
+          <div class="stat-number" data-target="5">0</div>
+          <p class="text-[var(--fg-muted)] mt-4 text-lg">Years Experience</p>
+        </div>
+        <div class="stat-item reveal-section" style="transition-delay: 0.2s;">
+          <div class="stat-number" data-target="500">0</div>
+          <p class="text-[var(--fg-muted)] mt-4 text-lg">Sessions Done</p>
+        </div>
+        <div class="stat-item reveal-section" style="transition-delay: 0.3s;">
+          <div class="stat-number" data-target="98">0</div>
+          <p class="text-[var(--fg-muted)] mt-4 text-lg">Satisfaction Rate</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-32 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="grid lg:grid-cols-2 gap-20 items-center">
+        <div class="flex justify-center reveal-section">
+        <div class="ba-container" id="baSlider2" style="max-width: 400px;">
+          <img src="https://z-cdn-media.chatglm.cn/files/c04e6d20-f0f7-4f11-9247-e3f917a9eee5.png?auth_key=1872200096-daa240653300411ca6d9bece9a83d7f5-0-8b778abdbf9061eb77eb5d2b6912fdda" alt="After" class="ba-image ba-after">
+          <img src="https://z-cdn-media.chatglm.cn/files/eec9404d-42b9-444b-8b9b-a4f4921bc2a6.png?auth_key=1872200096-6ae1c7f7ff6b4d328c2f23063c421131-0-5ac8b589b008b76c6117de46701736ef" alt="Before" class="ba-image ba-before">
+          <div class="ba-slider-line"></div>
+          <div class="ba-slider-circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+              <path d="M18 8L22 12L18 16"/>
+              <path d="M6 8L2 12L6 16"/>
+            </svg>
+          </div>
+          <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-5 py-2.5 rounded-full text-sm font-semibold z-10">Before</div>
+          <div class="absolute top-6 right-6 bg-[var(--primary)] text-white px-5 py-2.5 rounded-full text-sm font-semibold z-10">After</div>
+        </div>
+      </div>
+        
+        <div class="reveal-section" style="transition-delay: 0.2s;">
+          <p class="text-[var(--accent)] font-semibold tracking-[0.3em] uppercase text-sm mb-6">About Poonam</p>
+          <h2 class="font-display text-5xl md:text-6xl font-semibold leading-tight mb-8">
+            Your Journey to<br>Wellness Starts Here
+          </h2>
+          <p class="text-xl text-[var(--fg-muted)] leading-relaxed mb-8">
+            I'm a certified yoga instructor, face yoga expert, and holistic wellness coach. My mission is to help you transform your life naturally—physically, mentally, and spiritually.
+          </p>
+          <p class="text-lg text-[var(--fg-muted)] leading-relaxed mb-12">
+            Through personalized sessions, comprehensive diet plans, and proven wellness techniques, I've guided over 100 clients toward their health goals. Whether you seek weight loss, stress relief, flexibility, or a complete lifestyle transformation, I'm here to support you every step of the way.
+          </p>
+          
+          <div class="flex flex-wrap gap-4">
+            <div class="flex items-center gap-3 bg-[var(--bg-deep)] px-6 py-4 rounded-full">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01" stroke="var(--accent)" stroke-width="2" fill="none"/>
+              </svg>
+              <span class="font-medium">Certified Expert</span>
+            </div>
+            <div class="flex items-center gap-3 bg-[var(--bg-deep)] px-6 py-4 rounded-full">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--accent)">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01" stroke="var(--accent)" stroke-width="2" fill="none"/>
+              </svg>
+              <span class="font-medium">Holistic Approach</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-32 bg-[var(--bg-deep)]">
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="text-center mb-20 reveal-section">
+        <p class="text-[var(--accent)] font-semibold tracking-[0.3em] uppercase text-sm mb-6">Services</p>
+        <h2 class="font-display text-5xl md:text-6xl font-semibold">What I Offer</h2>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="service-card reveal-section">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] flex items-center justify-center mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-4">Yoga Sessions</h3>
+          <p class="text-[var(--fg-muted)] leading-relaxed">Traditional and modern yoga practices for flexibility, strength, and inner peace. All levels welcome.</p>
+        </div>
+        
+        <div class="service-card reveal-section" style="transition-delay: 0.1s;">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-4">Face Yoga</h3>
+          <p class="text-[var(--fg-muted)] leading-relaxed">Natural facial exercises to reduce aging signs, improve skin tone, and achieve a youthful radiant glow.</p>
+        </div>
+        
+        <div class="service-card reveal-section" style="transition-delay: 0.2s;">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--gold)] to-[#D4B896] flex items-center justify-center mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4"/>
+              <line x1="10" y1="1" x2="10" y2="4"/>
+              <line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-4">Cooking Sessions</h3>
+          <p class="text-[var(--fg-muted)] leading-relaxed">Learn to prepare delicious, nutritious meals that support your health goals and fit your lifestyle.</p>
+        </div>
+        
+        <div class="service-card reveal-section" style="transition-delay: 0.3s;">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] flex items-center justify-center mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-4">Diet Plans</h3>
+          <p class="text-[var(--fg-muted)] leading-relaxed">Personalized nutrition plans tailored to your body type, lifestyle, and specific health objectives.</p>
+        </div>
+        
+        <div class="service-card reveal-section" style="transition-delay: 0.4s;">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-4">Online Sessions</h3>
+          <p class="text-[var(--fg-muted)] leading-relaxed">Live virtual training from your home. Flexible scheduling with the same personalized attention.</p>
+        </div>
+        
+        <div class="service-card reveal-section" style="transition-delay: 0.5s;">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--gold)] to-[#D4B896] flex items-center justify-center mb-8">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-4">Offline Sessions</h3>
+          <p class="text-[var(--fg-muted)] leading-relaxed">In-person training with hands-on guidance, corrections, and immediate feedback for best results.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Transformations Section -->
+  <section id="transformations" class="py-32 relative overflow-hidden">
+    <div class="floating-shape w-96 h-96 bg-[var(--accent)] opacity-10 -top-48 right-0"></div>
+    
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="text-center mb-20 reveal-section">
+        <p class="text-[var(--accent)] font-semibold tracking-[0.3em] uppercase text-sm mb-6">Results</p>
+        <h2 class="font-display text-5xl md:text-6xl font-semibold">Real Transformations</h2>
+        <p class="text-xl text-[var(--fg-muted)] mt-6 max-w-2xl mx-auto">Drag the slider to witness the incredible changes my clients have achieved</p>
+      </div>
+      
+      <div class="flex justify-center reveal-section">
+        <div class="ba-container" id="baSlider2" style="max-width: 400px;">
+          <img src="https://z-cdn-media.chatglm.cn/files/c04e6d20-f0f7-4f11-9247-e3f917a9eee5.png?auth_key=1872200096-daa240653300411ca6d9bece9a83d7f5-0-8b778abdbf9061eb77eb5d2b6912fdda" alt="After" class="ba-image ba-after">
+          <img src="https://z-cdn-media.chatglm.cn/files/eec9404d-42b9-444b-8b9b-a4f4921bc2a6.png?auth_key=1872200096-6ae1c7f7ff6b4d328c2f23063c421131-0-5ac8b589b008b76c6117de46701736ef" alt="Before" class="ba-image ba-before">
+          <div class="ba-slider-line"></div>
+          <div class="ba-slider-circle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+              <path d="M18 8L22 12L18 16"/>
+              <path d="M6 8L2 12L6 16"/>
+            </svg>
+          </div>
+          <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-5 py-2.5 rounded-full text-sm font-semibold z-10">Before</div>
+          <div class="absolute top-6 right-6 bg-[var(--primary)] text-white px-5 py-2.5 rounded-full text-sm font-semibold z-10">After</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="py-32 bg-[var(--primary)]">
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="text-center mb-20 reveal-section">
+        <p class="text-[var(--gold)] font-semibold tracking-[0.3em] uppercase text-sm mb-6">Testimonials</p>
+        <h2 class="font-display text-5xl md:text-6xl font-semibold text-white">What Clients Say</h2>
+      </div>
+      
+      <div class="overflow-hidden reveal-section">
+        <div class="testimonial-track" id="testimonialTrack">
+          <div class="testimonial-card">
+            <div class="flex gap-1 mb-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-8">"Poonam completely transformed my approach to fitness. Lost 12kg in 4 months with her yoga and diet guidance. Her energy is contagious and her methods actually work!"</p>
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center text-white font-semibold text-lg">P</div>
+              <div>
+                <p class="font-semibold text-lg">Priya Sharma</p>
+                <p class="text-[var(--fg-muted)]">Weight Loss Journey</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="testimonial-card">
+            <div class="flex gap-1 mb-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-8">"Face yoga sessions with Poonam are amazing! Visible difference in just 6 weeks. My skin looks brighter, jawline more defined. Natural anti-aging that actually works!"</p>
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] flex items-center justify-center text-white font-semibold text-lg">A</div>
+              <div>
+                <p class="font-semibold text-lg">Anjali Patel</p>
+                <p class="text-[var(--fg-muted)]">Face Yoga Client</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="testimonial-card">
+            <div class="flex gap-1 mb-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-8">"Started online sessions during lockdown and never stopped. Poonam's teaching style is patient, motivating, and incredibly effective. Best wellness investment ever!"</p>
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--gold)] to-[#D4B896] flex items-center justify-center text-white font-semibold text-lg">R</div>
+              <div>
+                <p class="font-semibold text-lg">Ritika Gupta</p>
+                <p class="text-[var(--fg-muted)]">Online Yoga Client</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Duplicate for infinite scroll effect -->
+          <div class="testimonial-card">
+            <div class="flex gap-1 mb-6">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#B8965A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-8">"Poonam completely transformed my approach to fitness. Lost 12kg in 4 months with her yoga and diet guidance. Her energy is contagious and her methods actually work!"</p>
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center text-white font-semibold text-lg">P</div>
+              <div>
+                <p class="font-semibold text-lg">Priya Sharma</p>
+                <p class="text-[var(--fg-muted)]">Weight Loss Journey</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-32 relative overflow-hidden">
+    <div class="floating-shape w-96 h-96 bg-[var(--primary-light)] opacity-10 bottom-0 -left-48"></div>
+    
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="grid lg:grid-cols-2 gap-20">
+        <div class="reveal-section">
+          <p class="text-[var(--accent)] font-semibold tracking-[0.3em] uppercase text-sm mb-6">Contact</p>
+          <h2 class="font-display text-5xl md:text-6xl font-semibold leading-tight mb-8">
+            Start Your<br>Transformation Today
+          </h2>
+          <p class="text-xl text-[var(--fg-muted)] leading-relaxed mb-12">
+            Ready to take the first step? Fill out the form and message me directly on WhatsApp. I'll get back to you within 24 hours.
+          </p>
+          
+          <div class="space-y-8">
+            <a href="tel:+917567058679" class="flex items-center gap-6 group">
+              <div class="w-16 h-16 rounded-2xl bg-[var(--bg-deep)] flex items-center justify-center group-hover:bg-[var(--primary)] group-hover:text-white transition-all duration-500">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm text-[var(--fg-muted)]">Call Me</p>
+                <p class="font-semibold text-xl">+91 75670 58679</p>
+              </div>
+            </a>
+            
+            <a href="mailto:abcd@gmail.com" class="flex items-center gap-6 group">
+              <div class="w-16 h-16 rounded-2xl bg-[var(--bg-deep)] flex items-center justify-center group-hover:bg-[var(--primary)] group-hover:text-white transition-all duration-500">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm text-[var(--fg-muted)]">Email</p>
+                <p class="font-semibold text-xl">abcd@gmail.com</p>
+              </div>
+            </a>
+
+            <div class="flex gap-4 pt-4">
+              <a href="https://www.instagram.com/fitnfreshwithpoonam/" target="_blank" class="w-14 h-14 rounded-2xl bg-[var(--bg-deep)] flex items-center justify-center hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500 hover:text-white transition-all duration-500" aria-label="Instagram">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              <a href="https://www.facebook.com/fitnfreshwithpoonam/" target="_blank" class="w-14 h-14 rounded-2xl bg-[var(--bg-deep)] flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all duration-500" aria-label="Facebook">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+              <a href="https://wa.me/917567058679" target="_blank" class="w-14 h-14 rounded-2xl bg-[var(--bg-deep)] flex items-center justify-center hover:bg-green-500 hover:text-white transition-all duration-500" aria-label="WhatsApp">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="reveal-section" style="transition-delay: 0.2s;">
+          <form id="contactForm" class="bg-[var(--card)] p-10 md:p-14 rounded-3xl shadow-2xl border border-[var(--border)]">
+            <div class="form-group">
+              <input type="text" id="name" name="name" class="form-input" placeholder=" " required>
+              <label class="form-label">Your Name</label>
+            </div>
+            
+            <div class="form-group">
+              <input type="email" id="email" name="email" class="form-input" placeholder=" " required>
+              <label class="form-label">Email Address</label>
+            </div>
+            
+            <div class="form-group">
+              <input type="tel" id="phone" name="phone" class="form-input" placeholder=" ">
+              <label class="form-label">Phone Number</label>
+            </div>
+            
+            <div class="form-group">
+              <select id="service" name="service" class="form-input">
+                <option value="">Select Service</option>
+                <option value="Yoga Sessions">Yoga Sessions</option>
+                <option value="Face Yoga">Face Yoga</option>
+                <option value="Fitness Training">Fitness Training</option>
+                <option value="Diet Plans">Diet Plans</option>
+                <option value="Cooking Sessions">Cooking Sessions</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <textarea id="message" name="message" rows="4" class="form-input resize-none" placeholder=" "></textarea>
+              <label class="form-label">Your Message</label>
+            </div>
+            
+            <button type="submit" class="whatsapp-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              <span>Send via WhatsApp</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 bg-[var(--fg)]">
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="text-center lg:text-left">
+          <h3 class="font-display text-3xl font-semibold text-white mb-2">Fit n Fresh with Poonam</h3>
+          <p class="text-white/50">Transforming lives through yoga and wellness</p>
+        </div>
+        
+        <div class="flex gap-4">
+          <a href="https://www.instagram.com/fitnfreshwithpoonam/" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/fitnfreshwithpoonam/" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/917567058679" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all" aria-label="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <div class="h-px bg-white/10 my-10"></div>
+      
+      <p class="text-center text-white/30 text-sm">2026 Fit n Fresh, Face Yoga with Poonam. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================
+    // INITIALIZATION - All variables declared first
+    // ============================================
+    const preloader = document.getElementById('preloader');
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+    const navbar = document.getElementById('navbar');
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuLine1 = document.getElementById('menuLine1');
+    const menuLine2 = document.getElementById('menuLine2');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    const heroCanvas = document.getElementById('heroCanvas');
+    const revealSections = document.querySelectorAll('.reveal-section');
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const contactForm = document.getElementById('contactForm');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalContent = document.getElementById('modalContent');
+    const closeModal = document.getElementById('closeModal');
+    const whatsappConfirmBtn = document.getElementById('whatsappConfirmBtn');
+    const aboutImg = document.getElementById('aboutImg');
+    const testimonialTrack = document.getElementById('testimonialTrack');
+    
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    let dotX = 0;
+    let dotY = 0;
+    let menuOpen = false;
+    let whatsappMessage = '';
+    let testimonialPosition = 0;
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ============================================
+    // PRELOADER
+    // ============================================
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('loaded');
+        initHeroAnimations();
+      }, 1500);
+    });
+
+    // ============================================
+    // CUSTOM CURSOR
+    // ============================================
+    if (!prefersReducedMotion && window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animateCursor() {
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+        dotX += (mouseX - dotX) * 0.3;
+        dotY += (mouseY - dotY) * 0.3;
+
+        cursor.style.left = cursorX - 10 + 'px';
+        cursor.style.top = cursorY - 10 + 'px';
+        cursorDot.style.left = dotX - 3 + 'px';
+        cursorDot.style.top = dotY - 3 + 'px';
+
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      // Cursor hover states
+      const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, .ba-slider-circle, .ba-slider-line');
+      interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+    }
+
+    // ============================================
+    // MOBILE MENU
+    // ============================================
+    menuBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      if (menuOpen) {
+        mobileMenu.style.opacity = '1';
+        mobileMenu.style.visibility = 'visible';
+        menuLine1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        menuLine2.style.transform = 'rotate(-45deg) translate(0, 0)';
+        document.body.style.overflow = 'hidden';
+      } else {
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.visibility = 'hidden';
+        menuLine1.style.transform = 'none';
+        menuLine2.style.transform = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.style.opacity = '0';
+        mobileMenu.style.visibility = 'hidden';
+        menuLine1.style.transform = 'none';
+        menuLine2.style.transform = 'none';
+        document.body.style.overflow = '';
+      });
+    });
+
+    // ============================================
+    // NAVBAR SCROLL EFFECT
+    // ============================================
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(247, 244, 240, 0.9)';
+        navbar.style.backdropFilter = 'blur(20px)';
+        navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.05)';
+      } else {
+        navbar.style.background = 'transparent';
+        navbar.style.backdropFilter = 'none';
+        navbar.style.boxShadow = 'none';
+      }
+    });
+
+    // ============================================
+    // HERO CANVAS ANIMATION
+    // ============================================
+    if (!prefersReducedMotion && heroCanvas) {
+      const ctx = heroCanvas.getContext('2d');
+      let particles = [];
+      
+      function resizeCanvas() {
+        heroCanvas.width = window.innerWidth;
+        heroCanvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        
+        reset() {
+          this.x = Math.random() * heroCanvas.width;
+          this.y = Math.random() * heroCanvas.height;
+          this.size = Math.max(1, Math.random() * 3);
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          
+          if (this.x < 0 || this.x > heroCanvas.width || 
+              this.y < 0 || this.y > heroCanvas.height) {
+            this.reset();
+          }
+        }
+        
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, Math.max(0.5, this.size), 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(44, 62, 52, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < 80; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, heroCanvas.width, heroCanvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    }
+
+    // ============================================
+    // HERO TEXT ANIMATIONS
+    // ============================================
+    function initHeroAnimations() {
+      const splitChildren = document.querySelectorAll('.split-child');
+      splitChildren.forEach((child, i) => {
+        setTimeout(() => {
+          child.classList.add('revealed');
+        }, i * 100);
+      });
+
+      setTimeout(() => {
+        document.getElementById('heroDesc').style.opacity = '1';
+        document.getElementById('heroDesc').style.transition = 'opacity 1s ease';
+      }, 800);
+
+      setTimeout(() => {
+        document.getElementById('heroCTA').style.opacity = '1';
+        document.getElementById('heroCTA').style.transition = 'opacity 1s ease';
+      }, 1000);
+
+      setTimeout(() => {
+        document.getElementById('heroImage').style.opacity = '1';
+        document.getElementById('heroImage').style.transition = 'opacity 1.2s ease, transform 1.2s ease';
+      }, 600);
+    }
+
+    // ============================================
+    // SCROLL REVEAL OBSERVER
+    // ============================================
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          
+          // Animate stats
+          const stat = entry.target.querySelector('.stat-number');
+          if (stat && !stat.dataset.animated) {
+            animateStat(stat);
+            stat.dataset.animated = 'true';
+          }
+        }
+      });
+    }, observerOptions);
+
+    revealSections.forEach(section => revealObserver.observe(section));
+
+    // ============================================
+    // STAT COUNTER ANIMATION
+    // ============================================
+    function animateStat(el) {
+      const target = parseInt(el.dataset.target);
+      const duration = 2000;
+      const startTime = performance.now();
+      
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(easeProgress * target);
+        
+        el.textContent = current + (target === 98 ? '%' : '+');
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+
+    // ============================================
+    // BEFORE/AFTER SLIDER
+    // ============================================
+    function initBASliders() {
+      const sliders = document.querySelectorAll('.ba-container');
+      
+      sliders.forEach(slider => {
+        const line = slider.querySelector('.ba-slider-line');
+        const circle = slider.querySelector('.ba-slider-circle');
+        const beforeImg = slider.querySelector('.ba-before');
+        let isDragging = false;
+
+        function updateSlider(x) {
+          const rect = slider.getBoundingClientRect();
+          let percentage = ((x - rect.left) / rect.width) * 100;
+          percentage = Math.max(5, Math.min(95, percentage));
+          
+          if (line) line.style.left = percentage + '%';
+          if (circle) circle.style.left = percentage + '%';
+          if (beforeImg) beforeImg.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+        }
+
+        if (circle) {
+          circle.addEventListener('mousedown', () => isDragging = true);
+          circle.addEventListener('touchstart', () => isDragging = true);
+        }
+
+        document.addEventListener('mouseup', () => isDragging = false);
+        document.addEventListener('touchend', () => isDragging = false);
+
+        document.addEventListener('mousemove', (e) => {
+          if (isDragging) updateSlider(e.clientX);
+        });
+
+        document.addEventListener('touchmove', (e) => {
+          if (isDragging) updateSlider(e.touches[0].clientX);
+        });
+
+        slider.addEventListener('click', (e) => {
+          if (!e.target.closest('.ba-slider-circle')) {
+            updateSlider(e.clientX);
+          }
+        });
+      });
+    }
+    initBASliders();
+
+    // ============================================
+    // PARALLAX EFFECT
+    // ============================================
+    if (!prefersReducedMotion && aboutImg) {
+      const parallaxWrapper = aboutImg.parentElement;
+      
+      parallaxWrapper.addEventListener('mousemove', (e) => {
+        const rect = parallaxWrapper.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        
+        aboutImg.style.transform = `translate(${-x * 20}px, ${-y * 20}px) scale(1.1)`;
+      });
+
+      parallaxWrapper.addEventListener('mouseleave', () => {
+        aboutImg.style.transform = 'translate(0, 0) scale(1)';
+      });
+    }
+
+    // ============================================
+    // TESTIMONIAL AUTO-SCROLL
+    // ============================================
+    if (!prefersReducedMotion && testimonialTrack) {
+      const testimonialCards = testimonialTrack.querySelectorAll('.testimonial-card');
+      const cardWidth = 432; // 400px + 32px gap
+      
+      function scrollTestimonials() {
+        testimonialPosition -= cardWidth;
+        if (Math.abs(testimonialPosition) >= cardWidth * 3) {
+          testimonialPosition = 0;
+        }
+        testimonialTrack.style.transform = `translateX(${testimonialPosition}px)`;
+      }
+      
+      setInterval(scrollTestimonials, 4000);
+    }
+
+    // ============================================
+    // WHATSAPP MESSAGE SYSTEM
+    // ============================================
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value || 'Not provided';
+      const service = document.getElementById('service').value || 'Not specified';
+      const message = document.getElementById('message').value || 'No message';
+      
+      // Create formatted message
+      whatsappMessage = `*New Inquiry from Website*%0A%0A` +
+        `*Name:* ${encodeURIComponent(name)}%0A` +
+        `*Email:* ${encodeURIComponent(email)}%0A` +
+        `*Phone:* ${encodeURIComponent(phone)}%0A` +
+        `*Service:* ${encodeURIComponent(service)}%0A` +
+        `*Message:* ${encodeURIComponent(message)}`;
+      
+      // Show modal
+      modalOverlay.classList.add('active');
+      modalContent.classList.add('active');
+    });
+
+    // Close modal
+    closeModal.addEventListener('click', closeModalFn);
+    modalOverlay.addEventListener('click', closeModalFn);
+
+    function closeModalFn() {
+      modalOverlay.classList.remove('active');
+      modalContent.classList.remove('active');
+    }
+
+    // WhatsApp confirmation button
+    whatsappConfirmBtn.addEventListener('click', () => {
+      const whatsappURL = `https://wa.me/917567058679?text=${whatsappMessage}`;
+      window.open(whatsappURL, '_blank');
+      closeModalFn();
+      contactForm.reset();
+    });
+
+    // ============================================
+    // SMOOTH SCROLL
+    // ============================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offset = 100;
+          const position = target.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({
+            top: position,
+            behavior: prefersReducedMotion ? 'auto' : 'smooth'
+          });
+        }
+      });
+    });
+
+    // ============================================
+    // MAGNETIC BUTTONS
+    // ============================================
+    if (!prefersReducedMotion) {
+      const magneticBtns = document.querySelectorAll('.magnetic-btn');
+      
+      magneticBtns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0, 0)';
+        });
+      });
+    }
+  </script>
+</body>
+</html>
