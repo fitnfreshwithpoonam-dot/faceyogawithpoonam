@@ -457,20 +457,63 @@
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .testimonial-card {
-      min-width: 400px;
-      background: var(--card);
-      border-radius: 24px;
-      padding: 40px;
-      border: 1px solid var(--border);
-    }
 
-    @media (max-width: 640px) {
-      .testimonial-card {
-        min-width: 300px;
-      }
-    }
 
+
+
+
+
+
+
+
+.testimonial-card{
+  min-width:400px;
+  background:#ffffff; /* force solid white */
+  border-radius:24px;
+  padding:40px;
+  border:1px solid rgba(0,0,0,0.05);
+  box-shadow:0 20px 60px rgba(0,0,0,0.15);
+}
+
+
+
+.testimonial-track{
+  display:flex;
+  gap:32px;
+}
+
+.testimonial-card{
+  min-width:400px;
+}
+
+/* tablet */
+@media(max-width:1024px){
+  .testimonial-card{
+    min-width:50%;
+  }
+}
+
+/* mobile PERFECT 1 CARD */
+@media(max-width:640px){
+  .testimonial-track{
+    gap:0;
+  }
+  .testimonial-card{
+    min-width:100%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+	  
     /* Navigation */
     .nav-link {
       position: relative;
@@ -1544,20 +1587,95 @@ document.getElementById("contactForm").addEventListener("submit", function(e){
     // ============================================
     // TESTIMONIAL AUTO-SCROLL
     // ============================================
-    if (!prefersReducedMotion && testimonialTrack) {
-      const testimonialCards = testimonialTrack.querySelectorAll('.testimonial-card');
-      const cardWidth = 432; // 400px + 32px gap
-      
-      function scrollTestimonials() {
-        testimonialPosition -= cardWidth;
-        if (Math.abs(testimonialPosition) >= cardWidth * 3) {
-          testimonialPosition = 0;
-        }
-        testimonialTrack.style.transform = `translateX(${testimonialPosition}px)`;
-      }
-      
-      setInterval(scrollTestimonials, 4000);
+
+
+
+
+
+
+
+
+
+
+
+
+    // ============================================
+    // TESTIMONIAL AUTO-SCROLL
+// ===== RESPONSIVE TESTIMONIAL SLIDER =====
+if (!prefersReducedMotion && testimonialTrack) {
+
+  let testimonialIndex = 0;
+
+  function getCardWidth() {
+    const card = testimonialTrack.querySelector(".testimonial-card");
+    const gap = 32;
+
+    if(window.innerWidth < 640){
+      return testimonialTrack.offsetWidth; // full width mobile
+    } else if(window.innerWidth < 1024){
+      return testimonialTrack.offsetWidth / 2 + gap; // tablet
+    } else {
+      return 400 + gap; // desktop
     }
+  }
+
+  function scrollTestimonials(){
+    const cardWidth = getCardWidth();
+    testimonialIndex++;
+
+    testimonialTrack.style.transition="transform 0.7s ease";
+    testimonialTrack.style.transform = `translateX(-${testimonialIndex * cardWidth}px)`;
+
+    // loop reset
+    if(testimonialIndex >= testimonialTrack.children.length -1){
+      setTimeout(()=>{
+        testimonialTrack.style.transition="none";
+        testimonialIndex = 0;
+        testimonialTrack.style.transform = `translateX(0px)`;
+      },700);
+    }
+  }
+
+  setInterval(scrollTestimonials, 3500);
+
+  // swipe support mobile
+  let startX=0;
+  testimonialTrack.addEventListener("touchstart",e=>{
+    startX=e.touches[0].clientX;
+  });
+
+  testimonialTrack.addEventListener("touchend",e=>{
+    let endX=e.changedTouches[0].clientX;
+    let diff=startX-endX;
+
+    if(Math.abs(diff)>50){
+      if(diff>0){ testimonialIndex++; }
+      else{ testimonialIndex--; }
+
+      testimonialIndex=Math.max(0, testimonialIndex);
+      const cardWidth=getCardWidth();
+      testimonialTrack.style.transform=`translateX(-${testimonialIndex * cardWidth}px)`;
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	  
 
     // ============================================
     // WHATSAPP MESSAGE SYSTEM
